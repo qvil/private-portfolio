@@ -32,7 +32,7 @@ class AgreeForm extends React.Component {
     email: ""
   };
 
-  _handleChecked = event => {
+  _handleChecked = () => {
     this.setState({ checked: !this.state.checked });
   };
 
@@ -45,6 +45,7 @@ class AgreeForm extends React.Component {
   };
 
   render() {
+    console.log("##########");
     const { classes } = this.props;
     const { checked, email } = this.state;
     const { _handleChecked, handleChange, handleClick } = this;
