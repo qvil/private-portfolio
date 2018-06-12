@@ -34,18 +34,8 @@ class App extends Component {
             />
             <Route
               exact
-              path="/private-portfolio/"
+              path="/private-portfolio"
               component={() => <AgreeForm />}
-            />
-            <Route
-              path="/private-portfolio/auth"
-              render={() =>
-                this.state.auth ? (
-                  <AuthPage />
-                ) : (
-                  <Redirect to="/private-portfolio" />
-                )
-              }
             />
           </MainContainer>
         </Router>
