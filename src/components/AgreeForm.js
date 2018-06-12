@@ -52,19 +52,32 @@ class AgreeForm extends React.Component {
 
   handleClick = store => () => {
     const { history } = this.props;
-    store.db
-      .collection("users")
-      .add(this.state)
-      .then(docRef => {
-        console.log("Document written with ID: ", docRef.id);
-        alert("저장 되었습니다.");
-        this.setState(this.initState);
-        store.setAuth(true);
-        history.push("/auth");
-      })
-      .catch(error => {
-        console.error("Error adding document: ", error);
-      });
+
+    if (this._validate()) {
+      store.db
+        .collection("users")
+        .add(this.state)
+        .then(docRef => {
+          console.log("Document written with ID: ", docRef.id);
+          alert("저장 되었습니다.");
+          this.setState(this.initState);
+          store.setAuth(true);
+          history.push("/auth");
+        })
+        .catch(error => {
+          console.error("Error adding document: ", error);
+        });
+    }
+  };
+
+  _validate = () => {
+    const { username, company, email } = this.state;
+    if (username === "" || company === "" || email === "") {
+      alert("빈 항목을 입력하세요.");
+      return false;
+    }
+
+    return true;
   };
 
   render() {
