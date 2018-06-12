@@ -32,6 +32,21 @@ class App extends Component {
                 this.state.auth ? <AuthPage /> : <Redirect to="/" />
               }
             />
+            <Route
+              exact
+              path="/private-portfolio/"
+              component={() => <AgreeForm />}
+            />
+            <Route
+              path="/private-portfolio/auth"
+              render={() =>
+                this.state.auth ? (
+                  <AuthPage />
+                ) : (
+                  <Redirect to="/private-portfolio" />
+                )
+              }
+            />
           </MainContainer>
         </Router>
       </Provider>

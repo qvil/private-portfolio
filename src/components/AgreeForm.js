@@ -51,6 +51,7 @@ class AgreeForm extends React.Component {
   };
 
   handleClick = store => () => {
+    const { history, match } = this.props;
     store.db
       .collection("users")
       .add(this.state)
@@ -59,7 +60,9 @@ class AgreeForm extends React.Component {
         alert("저장 되었습니다.");
         this.setState(this.initState);
         store.setAuth(true);
-        this.props.history.push("/auth");
+        match.url === "/private-portfolio"
+          ? history.push("/private-portfolio/auth")
+          : history.push("/auth");
       })
       .catch(error => {
         console.error("Error adding document: ", error);
