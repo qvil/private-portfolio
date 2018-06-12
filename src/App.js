@@ -5,33 +5,36 @@ import firebase from "firebase";
 import "@firebase/firestore";
 import config from "./config.json";
 import { Provider } from "lib/store";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
     super(props);
     if (!firebase.apps.length) {
       firebase.initializeApp(config);
-      this.state = { db: firebase.firestore() };
+      this.state = {
+        db: firebase.firestore(),
+        auth: false,
+        setAuth: auth => this.setState({ auth })
+      };
     }
   }
 
   render() {
     return (
-      <Router>
-        <Provider value={this.state}>
-          <Route
-            exact
-            path="/"
-            component={() => (
-              <MainContainer>
-                <AgreeForm />
-              </MainContainer>
-            )}
-          />
-          <Route path="/auth" component={AuthPage} />
-        </Provider>
-      </Router>
+      <Provider value={this.state}>
+        <Router>
+          <MainContainer>
+            <Route exact path="/" component={() => <AgreeForm />} />
+            <Route
+              path="/auth"
+              render={() =>
+                this.state.auth ? <AuthPage /> : <Redirect to="/" />
+              }
+            />
+          </MainContainer>
+        </Router>
+      </Provider>
     );
   }
 }

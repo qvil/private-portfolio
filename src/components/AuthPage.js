@@ -11,7 +11,7 @@ class AuthPage extends React.Component {
       <MainContainer>
         <Card>
           <CardContent>
-            <img src={qrcode} style={{ width: "100%" }} />
+            <img src={qrcode} alt="qrcode" style={{ width: "100%" }} />
             <Typography variant="headline" component="h2">
               이 링크는 8월 10일 까지만 유효합니다. <br />
               문제가 있으면 아래 이메일로 연락주세요. <br />
@@ -19,7 +19,11 @@ class AuthPage extends React.Component {
               <ul>
                 <li>
                   링크 :{" "}
-                  <a href="http://gofile.me/3s65s/dEpjdEiG7" target="_blank">
+                  <a
+                    href="http://gofile.me/3s65s/dEpjdEiG7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     http://gofile.me/3s65s/dEpjdEiG7
                   </a>
                 </li>

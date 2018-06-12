@@ -12,6 +12,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Icon from "@material-ui/core/Icon";
 // Custom
 import { Consumer } from "lib/store";
+// Others
+import { withRouter } from "react-router-dom";
 
 const styles = theme => ({
   card: {
@@ -48,13 +50,16 @@ class AgreeForm extends React.Component {
     this.setState({ [name]: event.target.value });
   };
 
-  handleClick = db => () => {
-    db.collection("users")
+  handleClick = store => () => {
+    store.db
+      .collection("users")
       .add(this.state)
       .then(docRef => {
         console.log("Document written with ID: ", docRef.id);
         alert("저장 되었습니다.");
         this.setState(this.initState);
+        store.setAuth(true);
+        this.props.history.push("/auth");
       })
       .catch(error => {
         console.error("Error adding document: ", error);
@@ -106,13 +111,13 @@ class AgreeForm extends React.Component {
           </div>
           <CardActions>
             <Consumer>
-              {value => (
+              {store => (
                 <Button
                   variant="contained"
                   color="primary"
                   className={classes.button}
                   fullWidth
-                  onClick={handleClick(value.db)}
+                  onClick={handleClick(store)}
                 >
                   동의 및 포트폴리오 확인
                   <Icon className={classes.rightIcon}>send</Icon>
@@ -126,4 +131,4 @@ class AgreeForm extends React.Component {
   }
 }
 
-export default withStyles(styles)(AgreeForm);
+export default withRouter(withStyles(styles)(AgreeForm));
