@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { MainContainer, AgreeForm } from "components";
+import { MainContainer, AgreeForm, AuthPage } from "components";
 import firebase from "firebase";
 // import Firebase from "lib/firebase";
 import "@firebase/firestore";
 import config from "./config.json";
 import { Provider } from "lib/store";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
@@ -17,11 +18,20 @@ class App extends Component {
 
   render() {
     return (
-      <Provider value={this.state}>
-        <MainContainer>
-          <AgreeForm />
-        </MainContainer>
-      </Provider>
+      <Router>
+        <Provider value={this.state}>
+          <Route
+            exact
+            path="/"
+            component={() => (
+              <MainContainer>
+                <AgreeForm />
+              </MainContainer>
+            )}
+          />
+          <Route path="/auth" component={AuthPage} />
+        </Provider>
+      </Router>
     );
   }
 }
