@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 import Icon from "@material-ui/core/Icon";
+// Custom
+import { Consumer } from "lib/store";
 
 const styles = theme => ({
   card: {
@@ -27,10 +29,16 @@ const styles = theme => ({
 });
 
 class AgreeForm extends React.Component {
-  state = {
-    checked: false,
-    email: ""
-  };
+  constructor(props) {
+    super(props);
+    this.initState = {
+      checked: false,
+      username: "",
+      company: "",
+      email: ""
+    };
+    this.state = this.initState;
+  }
 
   _handleChecked = () => {
     this.setState({ checked: !this.state.checked });
@@ -40,14 +48,22 @@ class AgreeForm extends React.Component {
     this.setState({ [name]: event.target.value });
   };
 
-  handleClick = () => {
-    alert("준비 중 입니다.");
+  handleClick = db => () => {
+    db.collection("users")
+      .add(this.state)
+      .then(docRef => {
+        console.log("Document written with ID: ", docRef.id);
+        alert("저장 되었습니다.");
+        this.setState(this.initState);
+      })
+      .catch(error => {
+        console.error("Error adding document: ", error);
+      });
   };
 
   render() {
-    console.log("##########");
     const { classes } = this.props;
-    const { checked, email } = this.state;
+    const { checked, email, username, company } = this.state;
     const { _handleChecked, handleChange, handleClick } = this;
 
     return (
@@ -65,6 +81,18 @@ class AgreeForm extends React.Component {
             법적 책임을 질 수 있습니다.
           </Typography>
           <TextField
+            placeholder="이름"
+            value={username}
+            onChange={handleChange("username")}
+            fullWidth
+          />
+          <TextField
+            placeholder="소속"
+            value={company}
+            onChange={handleChange("company")}
+            fullWidth
+          />
+          <TextField
             placeholder="Email"
             value={email}
             onChange={handleChange("email")}
@@ -77,16 +105,20 @@ class AgreeForm extends React.Component {
             </span>
           </div>
           <CardActions>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              fullWidth
-              onClick={handleClick}
-            >
-              동의 및 포트폴리오 확인
-              <Icon className={classes.rightIcon}>send</Icon>
-            </Button>
+            <Consumer>
+              {value => (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  fullWidth
+                  onClick={handleClick(value.db)}
+                >
+                  동의 및 포트폴리오 확인
+                  <Icon className={classes.rightIcon}>send</Icon>
+                </Button>
+              )}
+            </Consumer>
           </CardActions>
         </CardContent>
       </Card>
